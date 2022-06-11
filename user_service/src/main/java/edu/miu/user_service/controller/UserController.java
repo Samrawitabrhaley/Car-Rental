@@ -22,7 +22,7 @@ public class UserController {
 
     @GetMapping("")
     public List<User> getAllUsers(@RequestHeader(value = "Authorization", required = false) String headerAuth){
-//        System.out.println("THIS IS FROM THE HEADER REQUEST: " + headerAuth);
+//      System.out.println("THIS IS FROM THE HEADER REQUEST: " + headerAuth);
         return userService.findAll();
     }
 

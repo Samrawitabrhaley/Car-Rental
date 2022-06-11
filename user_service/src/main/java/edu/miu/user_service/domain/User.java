@@ -21,6 +21,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String accountId;
+
+
     @NotBlank
     private String username;
 
@@ -40,7 +43,8 @@ public class User {
     @NotBlank
     private String userType;
 
-    public User(String username, String password, Set<Role> roles, String userType) {
+    public User(String accountId,String username, String password, Set<Role> roles, String userType) {
+        this.accountId=accountId;
         this.username = username;
         this.password = password;
         this.roles = roles;
