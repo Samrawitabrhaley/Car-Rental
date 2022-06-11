@@ -17,10 +17,11 @@ public class Reservation {
 
     @Id
     private String id;
+    private String fullName;
     private LocalDate startDate;
     private LocalDate endDate;
     private String carId;
-    private Long renterId;
+    private String renterId;
     private Double totalPrice;
     private Payment payment;
 }
