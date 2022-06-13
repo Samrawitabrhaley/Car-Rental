@@ -6,6 +6,7 @@ import com.cs590.reservation.vo.Inventory;
 import com.cs590.reservation.vo.Payment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -19,17 +20,20 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
     private final WebClient.Builder webClientBuilder;
     private final Environment environment;
+    private KafkaTemplate<String, String> kafkaTemplate;
 
     @Autowired
-    public ReservationServiceImpl(ReservationRepository reservationRepository, WebClient.Builder webClientBuilder, Environment environment) {
+    public ReservationServiceImpl(ReservationRepository reservationRepository, WebClient.Builder webClientBuilder, Environment environment, KafkaTemplate<String, String> kafkaTemplate) {
         this.reservationRepository = reservationRepository;
         this.webClientBuilder = webClientBuilder;
         this.environment = environment;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
 
     @Override
     public List<Reservation> getAllReservations() {
+        kafkaTemplate.send("Notifications", "what is this???");
         return reservationRepository.findAll();
     }
 
@@ -94,7 +98,9 @@ public class ReservationServiceImpl implements ReservationService {
                                 .block();
 
                         if (isBooked){
-                            return reservationRepository.save(reservation);
+                            Reservation finalReservation = reservationRepository.save(reservation);
+                            kafkaTemplate.send("Notifications", finalReservation.toString());
+                            return finalReservation;
                         }
                         else {
                             throw new IllegalArgumentException("Booking failed. Please try again later!");
