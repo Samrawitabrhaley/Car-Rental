@@ -62,4 +62,9 @@ public class JwtUtils {
     }
 
 
+    public String getUserIdFromJwtToken(String token) {
+
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("id",String.class);
+
+    }
 }

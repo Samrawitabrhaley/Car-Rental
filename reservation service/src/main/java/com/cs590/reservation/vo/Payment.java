@@ -11,11 +11,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Payment {
 
-    private Long id;
     private String fullName;
     private String cardNumber;
     private String ccv;
     private LocalDate expirationDate;
     private Address address;
+    private double totalPrice;
 
 }

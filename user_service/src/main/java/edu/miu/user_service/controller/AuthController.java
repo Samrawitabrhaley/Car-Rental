@@ -11,20 +11,19 @@ import edu.miu.user_service.security.jwt.JwtUtils;
 import edu.miu.user_service.security.services.UserDetailsImpl;
 import edu.miu.user_service.service.RoleService;
 import edu.miu.user_service.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
@@ -51,7 +50,6 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
         this.jwtUtils = jwtUtils;
     }
-
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, @RequestHeader(value = "Authorization", required = false) String headerAuth) {
         Authentication authentication = authenticationManager.authenticate(
@@ -67,6 +65,25 @@ public class AuthController {
                 userDetails.getId(),
                 userDetails.getUsername(),
                 roles));
+    }
+    @PutMapping("/{userId}")
+    public ResponseEntity<User> getAccountId(@PathVariable Long userId,@RequestBody User user,@RequestHeader(value = "User-service-auth", required = false) String headerAuth){
+
+        String token = parseJwt(headerAuth);
+        if(token != null && jwtUtils.validateJwtToken(token)){
+            String accountId = jwtUtils.getUserIdFromJwtToken(token);
+            return ResponseEntity.status(HttpStatus.OK).body(userService.saveUser(user));
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+    }
+
+    private String parseJwt(String headerAuth) {
+        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+            return headerAuth.substring(7, headerAuth.length());
+        }
+        return null;
     }
 
 
