@@ -6,6 +6,7 @@ JWT_EXPIRATION_MS: ${JWT-EXPIRATION-MS}
 
 spring:
   application:
+
     name: USER-SERVICE
   datasource:
     url: jdbc:mysql://${MYSQL-URL}/${MYSQL-DATABASE}?allowPublicKeyRetrieval=true&useSSL=false&autoReconnect=true

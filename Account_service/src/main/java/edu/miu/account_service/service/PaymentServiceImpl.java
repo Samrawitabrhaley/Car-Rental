@@ -10,8 +10,10 @@ public class PaymentServiceImpl implements PaymentService{
     @Autowired
     private PaymentRepository paymentRepository;
 
+
+
     @Override
-    public Payment getPaymentById(Long id) {
-        return paymentRepository.findById(id).get();
+    public Payment savePayment(Payment payment) {
+        return paymentRepository.save(payment);
     }
 }

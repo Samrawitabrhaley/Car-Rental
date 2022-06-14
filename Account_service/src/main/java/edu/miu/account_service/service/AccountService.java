@@ -4,8 +4,8 @@ import edu.miu.account_service.domain.Account;
 
 public interface AccountService {
     public Account createAccount(Account account);
-    public Account getAccount(Long id);
-    public void deleteAccount(Long id);
+    public Account getAccount(String id);
+    public void deleteAccount(String id);
 
 
 

@@ -50,12 +50,12 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public Account getAccount(@PathVariable Long id) {
+    public Account getAccount(@PathVariable String id) {
         return accountService.getAccount(id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAccount(Long id) {
+    public void deleteAccount(String id) {
         accountService.deleteAccount(id);
 
 
